@@ -1,0 +1,902 @@
+Saya ingin kamu membangun UI/UX web app bernama **LaporKursus**.
+
+Aplikasi ini adalah web app manajemen kursus untuk mengelola:
+
+* data siswa
+* kelas/program kursus
+* absensi kehadiran
+* SPP bulanan
+* pesan pengingat WhatsApp
+* laporan project siswa
+* profil siswa
+* laporan umum
+
+Gunakan stack frontend:
+
+* React
+* Tailwind CSS
+* lucide-react untuk icon
+* komponen reusable
+* dummy data lokal dulu
+* belum perlu integrasi backend
+* UI harus siap dikembangkan nanti untuk Cloudflare Pages + D1
+
+Fokus utama tugas ini adalah membuat **UI/UX desktop web app yang sangat polished**, bukan backend.
+
+# Target Visual
+
+Buat desain dengan gaya:
+
+* modern SaaS dashboard
+* clean
+* profesional
+* ringan
+* ramah untuk lembaga kursus
+* light theme
+* banyak white space
+* rounded cards
+* soft shadow
+* border tipis
+* warna biru, teal, hijau lembut
+* tidak terlalu ramai
+* tidak dark mode
+* tidak terlihat seperti template admin jadul
+
+Gunakan kesan visual seperti aplikasi manajemen pendidikan yang premium, rapi, dan mudah dipakai.
+
+# Nama Produk
+
+Nama aplikasi: **LaporKursus**
+
+Tagline:
+**Aplikasi Manajemen Kursus & Pelaporan Terpadu**
+
+Deskripsi singkat:
+**Kelola data siswa, absensi, pembayaran, project, dan laporan dengan mudah dalam satu platform.**
+
+# Palet Warna
+
+Gunakan warna berikut sebagai acuan:
+
+Primary Blue:
+`#2563EB`
+
+Soft Blue:
+`#DBEAFE`
+
+Teal:
+`#14B8A6`
+
+Green:
+`#22C55E`
+
+Orange:
+`#F59E0B`
+
+Purple:
+`#8B5CF6`
+
+Red:
+`#EF4444`
+
+Background utama:
+`#F8FAFC` atau `#F9FBFD`
+
+Card background:
+`#FFFFFF`
+
+Border:
+`#E5E7EB`
+
+Text utama:
+`#0F172A`
+
+Text sekunder:
+`#475569`
+
+Text muted:
+`#94A3B8`
+
+# Typography
+
+Gunakan font sans-serif modern:
+
+* Inter, Geist, atau system-ui
+
+Aturan tipografi:
+
+* Page title: 28–32px, bold/semibold
+* Section title: 18–22px, semibold
+* Card title: 14–16px, semibold
+* Body text: 14px
+* Caption/meta: 12px
+* Gunakan line-height nyaman
+* Jangan terlalu padat
+
+# Struktur Komponen
+
+Buat komponen reusable minimal:
+
+* `AppShell`
+* `Sidebar`
+* `Topbar`
+* `StatCard`
+* `SectionCard`
+* `DataTable`
+* `StatusBadge`
+* `ProgressBar`
+* `ReminderItem`
+* `ActivityTable`
+* `AttendancePage`
+* `BillingPage`
+* `ReminderPage`
+* `ProjectsPage`
+* `StudentProfilePage`
+* `DashboardPage`
+
+Boleh menambahkan komponen lain jika diperlukan.
+
+# Layout Utama
+
+Buat layout desktop dengan struktur:
+
+1. Sidebar kiri
+2. Topbar atas
+3. Main content area
+
+Sidebar lebar sekitar 240–260px.
+Main content memiliki padding 24–32px.
+Gap antar card 20–24px.
+Semua card menggunakan:
+
+* background putih
+* rounded-2xl
+* border abu muda
+* shadow lembut
+* padding lega
+
+# Sidebar
+
+Sidebar kiri berisi logo dan menu.
+
+Logo:
+
+* icon edukasi sederhana, misalnya graduation cap/book
+* teks: **LaporKursus**
+* warna biru dan teal
+
+Menu sidebar berurutan:
+
+1. Dashboard
+2. Siswa
+3. Kelas
+4. Absensi
+5. SPP Bulanan
+6. Pesan Pengingat
+7. Project Siswa
+8. Laporan
+9. Pengaturan
+
+Gunakan icon dari lucide-react.
+
+Style sidebar:
+
+* background putih
+* border kanan tipis
+* item menu rounded-xl
+* item aktif background soft blue
+* item aktif text primary blue
+* hover state lembut
+* spacing rapi
+* jangan terlalu padat
+
+# Topbar
+
+Topbar berada di atas main content.
+
+Isi topbar:
+
+* judul halaman di kiri
+* search bar
+* icon notifikasi
+* avatar user
+* nama user: **Admin Kursus**
+* role kecil: **Administrator**
+
+Search placeholder:
+**Cari siswa, kelas, atau menu...**
+
+Style topbar:
+
+* tinggi sekitar 72px
+* background transparan atau putih
+* clean
+* tidak terlalu ramai
+
+# Navigasi Halaman
+
+Buat state aktif menu sidebar.
+
+Ketika menu diklik, tampilkan halaman sesuai menu:
+
+* Dashboard
+* Absensi
+* SPP Bulanan
+* Pesan Pengingat
+* Project Siswa
+* Profil Siswa boleh dibuat sebagai halaman contoh atau detail dari siswa/project
+
+Untuk menu yang belum lengkap seperti Siswa, Kelas, Laporan, Pengaturan, boleh tampilkan placeholder card yang tetap rapi dengan teks “Dalam pengembangan”.
+
+# Dashboard Page
+
+Buat halaman utama berjudul:
+**Dashboard**
+
+## KPI Cards
+
+Tampilkan 4 stat cards dalam satu baris pada desktop.
+
+Card 1:
+
+* Title: **Siswa Aktif**
+* Value: **128**
+* Subtext: **↑ 8 dari bulan lalu**
+* Icon: Users
+* Accent: biru
+
+Card 2:
+
+* Title: **Hadir Hari Ini**
+* Value: **96**
+* Subtext: **75% dari total siswa**
+* Icon: UserCheck
+* Accent: hijau
+
+Card 3:
+
+* Title: **SPP Belum Lunas**
+* Value: **28**
+* Subtext: **Rp 14.750.000**
+* Icon: Wallet/CreditCard
+* Accent: oranye
+
+Card 4:
+
+* Title: **Project Perlu Review**
+* Value: **17**
+* Subtext: **Perlu perhatian mentor**
+* Icon: FolderKanban/FileCheck
+* Accent: ungu
+
+Style KPI:
+
+* icon di dalam lingkaran soft color
+* angka besar
+* subtext kecil
+* card putih, rounded-2xl, shadow lembut
+
+## Ringkasan Kehadiran
+
+Buat card besar berjudul:
+**Ringkasan Kehadiran (7 Hari Terakhir)**
+
+Isi chart sederhana:
+
+* line chart custom boleh pakai div/svg sederhana
+* sumbu X:
+
+  * 13 Mei
+  * 14 Mei
+  * 15 Mei
+  * 16 Mei
+  * 17 Mei
+  * 18 Mei
+  * 19 Mei
+* sumbu Y:
+
+  * 0%
+  * 25%
+  * 50%
+  * 75%
+  * 100%
+
+Data kira-kira:
+
+* 52
+* 56
+* 80
+* 84
+* 62
+* 78
+* 66
+
+Tambahkan tooltip kecil pada titik 17 Mei:
+
+* **17 Mei**
+* **Kehadiran: 78%**
+
+Style chart:
+
+* garis biru
+* titik biru
+* grid line tipis
+* background putih
+* clean
+
+## Pengingat Card
+
+Di samping chart, buat card berjudul:
+**Pengingat**
+
+Ada link kecil:
+**Lihat semua**
+
+Isi daftar:
+
+1. **SPP Bulan Mei jatuh tempo**
+
+   * 5 siswa belum membayar
+   * 09:30
+
+2. **Absensi belum diisi**
+
+   * 2 kelas hari ini belum diisi
+   * 08:45
+
+3. **Project perlu review**
+
+   * 17 project menunggu review
+   * 08:30
+
+4. **Kelas akan dimulai**
+
+   * Desain Grafis - 10:00 WIB
+   * 09:50
+
+Setiap item punya icon kecil dalam kotak/lingkaran soft color.
+
+## Aktivitas Hari Ini
+
+Buat card tabel berjudul:
+**Aktivitas Hari Ini**
+
+Kolom:
+
+* Waktu
+* Aktivitas
+* Detail
+* Oleh
+
+Data:
+
+1. 09:15 | Absensi diisi | Kelas Web Development - Pagi | Bu Rina
+2. 09:05 | Pembayaran SPP | Budi Santoso - Mei 2024 | Admin
+3. 08:30 | Project diunggah | UI/UX Design - Wireframe | Andi Wijaya
+4. 08:20 | Pesan pengingat dikirim | Pengingat SPP Bulan Mei | Admin
+5. 08:10 | Siswa baru ditambahkan | Siti Aisyah - Kelas English | Admin
+
+# Absensi Page
+
+Buat halaman berjudul:
+**Absensi Kehadiran**
+
+Card utama berisi filter dan tabel.
+
+Filter atas:
+
+* Tanggal: **19 Mei 2024**
+* Kelas: **Web Development - Pagi**
+* Tombol biru: **Simpan Absensi**
+
+Tabel absensi:
+
+Kolom:
+
+* No
+* Nama Siswa
+* Status
+* Keterangan
+
+Data:
+
+1. Andi Wijaya | H | Hadir | -
+2. Budi Santoso | H | Hadir | -
+3. Citra Lestari | T | Telat | 09:15
+4. Dewi Puspita | I | Izin | Sakit
+5. Eko Prasetyo | A | Alpa | -
+6. Fajar Nugroho | H | Hadir | -
+7. Gita Maharani | I | Izin | Keperluan keluarga
+8. Hendra Setiawan | H | Hadir | -
+
+Status badge:
+
+* H = hijau
+* A = merah
+* I = biru
+* T = oranye
+
+Legend bawah:
+
+* **H = Hadir**
+* **A = Alpa**
+* **I = Izin**
+* **T = Telat**
+
+Catatan penting:
+
+* Badge harus terlihat jelas dan mudah dibedakan.
+* Tampilan tabel harus bersih dan nyaman dibaca.
+
+# SPP Bulanan Page
+
+Buat halaman berjudul:
+**SPP Bulanan**
+
+## Summary Cards
+
+Tampilkan 3 kartu ringkasan:
+
+Card 1:
+
+* **Total Pemasukan (Mei 2024)**
+* **Rp 28.750.000**
+* **↑ 12% dari bulan lalu**
+
+Card 2:
+
+* **Total Tunggakan**
+* **Rp 14.750.000**
+* **28 siswa**
+
+Card 3:
+
+* **Persentase Lunas**
+* **65%**
+* **82 dari 128 siswa**
+
+Tambahkan tombol kanan atas:
+**Export Laporan**
+
+## Filter
+
+Filter:
+
+* Bulan: **Mei 2024**
+* Kelas: **Semua Kelas**
+* Search: **Cari siswa...**
+
+## Tabel SPP
+
+Kolom:
+
+* No
+* Nama Siswa
+* Kelas
+* Bulan
+* Nominal
+* Status
+* Aksi
+
+Data:
+
+1. Andi Wijaya | Web Dev - Pagi | Mei 2024 | Rp 1.000.000 | Lunas | Lihat
+2. Budi Santoso | Web Dev - Pagi | Mei 2024 | Rp 1.000.000 | Belum Lunas | Tagih
+3. Citra Lestari | UI/UX Design | Mei 2024 | Rp 1.000.000 | Sebagian | Lihat
+4. Dewi Puspita | Digital Marketing | Mei 2024 | Rp 1.000.000 | Lunas | Lihat
+5. Eko Prasetyo | Web Dev - Malam | Mei 2024 | Rp 1.000.000 | Belum Lunas | Tagih
+
+Status badge:
+
+* Lunas = hijau
+* Belum Lunas = merah
+* Sebagian = oranye
+
+Footer:
+**Menampilkan 1 - 5 dari 28 data**
+
+Pagination:
+1 2 3 4 5
+
+# Pesan Pengingat Page
+
+Buat halaman berjudul:
+**Pesan Pengingat**
+
+Layout utama 3 kolom:
+
+1. Template pesan
+2. Editor pesan
+3. Preview WhatsApp
+
+## Kolom Template
+
+Judul:
+**Pilih Template**
+
+Template list:
+
+1. **Pengingat Kehadiran**
+
+   * Pengingat untuk siswa yang sering tidak hadir
+
+2. **Pengingat SPP**
+
+   * Pengingat pembayaran SPP bulanan
+
+3. **Pengingat Project**
+
+   * Pengingat deadline atau review project
+
+4. **Pengumuman Kelas**
+
+   * Informasi umum untuk siswa
+
+Template aktif:
+
+* background soft blue
+* border primary blue
+* text primary blue
+
+## Kolom Editor
+
+Label:
+**Pesan**
+
+Textarea isi default:
+
+Halo {nama_siswa},
+
+Kami mencatat Anda belum hadir di beberapa pertemuan.
+Mohon untuk lebih memperhatikan kehadiran agar tidak
+mengganggu proses belajar Anda.
+
+Terima kasih atas perhatiannya.
+
+Salam,
+Tim {nama_kursus}
+
+Counter:
+**176 / 500**
+
+Variabel tersedia:
+
+* `{nama_siswa}`
+* `{nama_kursus}`
+* `{kelas}`
+* `{tanggal}`
+
+Tampilkan sebagai small pill/chip.
+
+## Kolom Preview WhatsApp
+
+Judul:
+**Preview (WhatsApp)**
+
+Buat area preview seperti chat WhatsApp sederhana.
+Gunakan bubble hijau pucat/abu kehijauan.
+
+Isi bubble:
+
+Halo Andi Wijaya,
+
+Kami mencatat Anda belum hadir di beberapa pertemuan.
+Mohon untuk lebih memperhatikan kehadiran agar tidak
+mengganggu proses belajar Anda.
+
+Terima kasih atas perhatiannya.
+
+Salam,
+Tim LaporKursus
+
+Timestamp:
+**10:30 ✓✓**
+
+Bagian bawah:
+
+* Label: **Kirim ke**
+* Dropdown: **Siswa yang dipilih (5)**
+* Tombol hijau besar: **Kirim WhatsApp**
+
+Tombol harus menggunakan icon WhatsApp sederhana atau MessageCircle.
+
+# Project Siswa Page
+
+Buat halaman berjudul:
+**Laporan Project Siswa**
+
+Filter atas:
+
+* Kelas: **UI/UX Design**
+* Status: **Semua Status**
+* Tombol biru: **+ Tambah Project**
+
+Tabel project:
+
+Kolom:
+
+* No
+* Siswa
+* Project
+* Progress
+* Status
+* Mentor
+* Deadline
+
+Data:
+
+1. Andi Wijaya | Redesign Landing Page | 75% | Proses | Bu Rina | 25 Mei 2024
+2. Citra Lestari | Mobile App UI | 40% | Revisi | Pak Dimas | 22 Mei 2024
+3. Dewi Puspita | User Flow & Wireframe | 90% | Proses | Bu Rina | 20 Mei 2024
+4. Eko Prasetyo | Dashboard Admin | 100% | Selesai | Pak Dimas | 18 Mei 2024
+
+Progress:
+
+* tampilkan angka persentase
+* tampilkan progress bar horizontal
+
+Status badge:
+
+* Proses = biru
+* Revisi = oranye
+* Selesai = hijau
+
+## Detail Project Card
+
+Di bawah tabel, buat detail card untuk Andi Wijaya.
+
+Kiri:
+
+* avatar
+* **Andi Wijaya**
+* **UI/UX Design**
+
+Tengah:
+
+* Project: **Redesign Landing Page**
+* Progress: **75%**
+* Status: **Proses**
+* progress bar
+
+Kanan:
+
+* **Mentor Notes**
+
+* Desain sudah bagus, perbaiki pada bagian kontras warna tombol CTA.
+
+* **Next Target**
+
+* Finalisasi halaman beranda & integrasi aset.
+
+* Deadline:
+
+* **25 Mei 2024**
+
+# Profil Siswa Page
+
+Buat halaman/komponen berjudul:
+**Profil Siswa**
+
+Data siswa:
+
+* Nama: **Andi Wijaya**
+* Program: **Web Development - Pagi**
+* Info: **Bergabung sejak 10 Jan 2024**
+
+Gunakan avatar bulat.
+
+## Summary atas
+
+Card kecil 1:
+
+* **Kehadiran**
+* **78%**
+* **(35 / 45 pertemuan)**
+
+Card kecil 2:
+
+* **SPP Mei 2024**
+* **Belum Lunas**
+* **Rp 1.000.000**
+
+Card kecil 3:
+
+* **Project Aktif**
+* **75%**
+* **Redesign Landing Page**
+
+## Tabs
+
+Buat tabs:
+
+* Ringkasan
+* Kehadiran
+* SPP
+* Project
+* Informasi
+
+Tab aktif default:
+**Ringkasan**
+
+## Isi Ringkasan
+
+Tiga card kecil:
+
+1. **Ringkasan Kehadiran**
+
+   * 7 Hari Terakhir
+   * mini bar chart
+
+2. **Riwayat SPP Terakhir**
+
+   * Mei 2024 — Belum Lunas
+   * Apr 2024 — Lunas
+   * Mar 2024 — Lunas
+
+3. **Project Terbaru**
+
+   * Redesign Landing Page
+   * 75%
+   * progress bar
+   * Deadline: 25 Mei 2024
+
+# Data Dummy Global
+
+Gunakan nama siswa berikut:
+
+* Andi Wijaya
+* Budi Santoso
+* Citra Lestari
+* Dewi Puspita
+* Eko Prasetyo
+* Fajar Nugroho
+* Gita Maharani
+* Hendra Setiawan
+* Siti Aisyah
+* Nabila Putri
+
+Gunakan kelas/program:
+
+* Web Development - Pagi
+* Web Dev - Malam
+* UI/UX Design
+* Digital Marketing
+* English Class
+* Desain Grafis
+
+# Style Detail
+
+## Cards
+
+Semua card:
+
+* `bg-white`
+* `rounded-2xl`
+* `border border-slate-200`
+* `shadow-sm`
+* `p-5` atau `p-6`
+
+## Buttons
+
+Primary:
+
+* background primary blue
+* text white
+* rounded-xl
+* hover lebih gelap
+
+Success:
+
+* background green
+* text white
+* rounded-xl
+
+Secondary:
+
+* background slate-100
+* text slate-700
+* rounded-xl
+
+## Inputs
+
+* rounded-xl
+* border slate-200
+* focus ring blue
+* placeholder muted
+* height 40–44px
+
+## Tables
+
+* header background sangat lembut, misalnya `bg-slate-50`
+* row border bawah tipis
+* hover row `bg-slate-50`
+* text 13–14px
+* row height nyaman
+* tidak terlalu padat
+
+## Badges
+
+Gunakan pill:
+
+* rounded-full
+* padding horizontal 8–12px
+* text 12px
+* font-medium
+* background lembut
+* warna teks sesuai status
+
+Contoh:
+
+* green: bg-green-100 text-green-700
+* red: bg-red-100 text-red-700
+* blue: bg-blue-100 text-blue-700
+* orange: bg-orange-100 text-orange-700
+* purple: bg-purple-100 text-purple-700
+
+# Responsiveness
+
+Prioritas utama desktop.
+
+Tetap buat responsive dasar:
+
+* desktop: sidebar tetap
+* tablet: sidebar menyempit/collapse jika perlu
+* mobile: layout stack vertikal
+
+Namun jangan mengorbankan kualitas tampilan desktop.
+
+# Interaksi Dasar
+
+Buat interaksi ringan:
+
+* klik menu sidebar mengubah halaman aktif
+* tab profil siswa bisa aktif secara visual
+* tombol tidak perlu punya fungsi backend
+* select/input boleh dummy
+* pagination boleh dummy
+* tombol Kirim WhatsApp boleh dummy
+
+# Output Implementasi
+
+Saya ingin kamu menghasilkan kode yang langsung bisa dijalankan.
+
+Pastikan:
+
+* tidak ada error import
+* semua komponen terhubung
+* Tailwind class rapi
+* UI terlihat polished
+* tidak ada halaman kosong
+* dummy data tampil
+* desain konsisten
+
+Jika project sudah ada, sesuaikan struktur yang tersedia.
+Jika belum ada, buat struktur React standar yang rapi.
+
+# Jangan Lakukan
+
+Jangan:
+
+* membuat dark mode
+* membuat UI terlalu ramai
+* memakai warna neon berlebihan
+* membuat layout terlalu padat
+* membuat tampilan seperti admin template lama
+* mengganti nama menu utama
+* menghapus modul Absensi, SPP, Pesan Pengingat, Project Siswa
+* membuat desain sekadar wireframe
+* terlalu fokus backend
+* menambahkan fitur kompleks yang tidak diminta
+
+# Prioritas Akhir
+
+Prioritas utama:
+
+1. tampilan mirip dashboard SaaS profesional
+2. layout bersih dan konsisten
+3. komponen reusable
+4. semua modul utama tampil
+5. dummy data sesuai spesifikasi
+6. siap dikembangkan ke Cloudflare Pages + D1
+
+Mulai implementasi sekarang.
