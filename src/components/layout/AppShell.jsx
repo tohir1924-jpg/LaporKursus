@@ -6,6 +6,7 @@ import {
   FolderKanban,
   GraduationCap,
   LayoutDashboard,
+  LogOut,
   MessageCircle,
   Search,
   Settings,
@@ -41,7 +42,7 @@ const pageTitles = {
   '/settings': 'Pengaturan',
 };
 
-export function AppShell({ children }) {
+export function AppShell({ children, onLogout }) {
   const location = useLocation();
   const pageTitle = pageTitles[location.pathname] ?? 'Dashboard';
 
@@ -49,7 +50,7 @@ export function AppShell({ children }) {
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900">
       <Sidebar />
       <div className="min-h-screen lg:pl-[260px]">
-        <Topbar pageTitle={pageTitle} />
+        <Topbar pageTitle={pageTitle} onLogout={onLogout} />
         <main className="px-4 pb-8 pt-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">{children}</div>
         </main>
@@ -112,7 +113,23 @@ function Sidebar() {
   );
 }
 
-function Topbar({ pageTitle }) {
+function Topbar({ pageTitle, onLogout }) {
+  let user = { name: 'Admin Kursus', role: 'admin' };
+  try {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      user = JSON.parse(savedUser);
+    }
+  } catch (e) {
+    console.error('Error parsing user data in Topbar', e);
+  }
+
+  const initials = user.name
+    ? user.name.split(' ').map((p) => p[0]).join('').substring(0, 2).toUpperCase()
+    : 'AK';
+
+  const roleText = user.role === 'admin' ? 'Administrator' : 'Pengajar';
+
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-[#F8FAFC]/90 px-4 py-4 backdrop-blur sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -131,15 +148,25 @@ function Topbar({ pageTitle }) {
           <button className="flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50" aria-label="Notifikasi">
             <Bell size={19} />
           </button>
+          
           <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-teal-500 text-sm font-bold text-white">
-              AK
+              {initials}
             </div>
             <div className="hidden text-left sm:block">
-              <p className="text-sm font-semibold leading-4 text-slate-900">Admin Kursus</p>
-              <p className="mt-1 text-xs text-slate-500">Administrator</p>
+              <p className="text-sm font-semibold leading-4 text-slate-900">{user.name}</p>
+              <p className="mt-1 text-xs text-slate-500">{roleText}</p>
             </div>
           </div>
+
+          <button 
+            onClick={onLogout}
+            className="flex h-11 w-11 items-center justify-center rounded-xl border border-red-200 bg-red-50 text-red-600 transition hover:bg-red-100" 
+            aria-label="Logout"
+            title="Keluar dari sistem"
+          >
+            <LogOut size={19} />
+          </button>
         </div>
       </div>
     </header>

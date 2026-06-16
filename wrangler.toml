@@ -1,0 +1,9 @@
+name = "lapor-kursus"
+compatibility_date = "2026-06-15"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "lapor-kursus-db"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+preview_database_id = "REPLACE_WITH_D1_PREVIEW_DATABASE_ID"

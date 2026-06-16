@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './components/layout/AppShell';
 import { AttendancePage } from './pages/AttendancePage';
@@ -7,10 +8,49 @@ import { PlaceholderPage } from './pages/PlaceholderPage';
 import { ProjectsPage } from './pages/ProjectsPage';
 import { ReminderPage } from './pages/ReminderPage';
 import { StudentProfilePage } from './pages/StudentProfilePage';
+import { LoginPage } from './pages/LoginPage';
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    if (savedUser && token) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        localStorage.clear();
+      }
+    }
+    setChecking(false);
+  }, []);
+
+  const handleLoginSuccess = (loggedInUser) => {
+    setUser(loggedInUser);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
+  if (checking) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <LoginPage onLoginSuccess={handleLoginSuccess} />;
+  }
+
   return (
-    <AppShell>
+    <AppShell onLogout={handleLogout}>
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
@@ -30,3 +70,4 @@ function App() {
 }
 
 export default App;
+

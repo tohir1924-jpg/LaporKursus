@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   BookOpen,
   CalendarCheck,
@@ -8,10 +9,75 @@ import {
   Users,
   Wallet,
 } from 'lucide-react';
-import { activityRows } from '../data/mockData';
+import { activityRows as mockActivityRows } from '../data/mockData';
 import { accentMap, DataTable, SectionCard, StatCard } from '../components/ui';
+import { useQuery } from '../hooks/useApi';
 
 export function DashboardPage() {
+  const currentMonth = new Date().getMonth() + 1;
+  const currentYear = new Date().getFullYear();
+
+  // Fetch API data
+  const { data: studentsData, loading: loadingStudents } = useQuery('/students');
+  const { data: feesSummary, loading: loadingFees } = useQuery(`/fees/summary?month=${currentMonth}&year=${currentYear}`);
+  const { data: projectsData, loading: loadingProjects } = useQuery('/projects');
+  const { data: logsData, loading: loadingLogs } = useQuery('/messages/logs');
+  const { data: attendanceToday } = useQuery(`/attendance?date=${new Date().toISOString().split('T')[0]}`);
+
+  // 1. Calculate Active Students
+  const activeStudentsCount = studentsData 
+    ? studentsData.filter(s => s.status === 'active').length 
+    : 128;
+  const activeStudentsSubtext = studentsData 
+    ? `Total data: ${studentsData.length} siswa` 
+    : "+8 dari bulan lalu";
+
+  // 2. Calculate Attendance Today
+  const attendanceTodayCount = attendanceToday && attendanceToday.length > 0
+    ? attendanceToday.filter(a => a.status === 'H' || a.status === 'T').length
+    : 96;
+  const attendancePercentage = studentsData && studentsData.length > 0 && attendanceToday
+    ? Math.round((attendanceTodayCount / studentsData.filter(s => s.status === 'active').length) * 100)
+    : 75;
+
+  // 3. Calculate SPP Belum Lunas
+  const unpaidCount = feesSummary ? feesSummary.tunggakan_students : 28;
+  const totalTunggakan = feesSummary 
+    ? `Rp ${feesSummary.tunggakan.toLocaleString('id-ID')}` 
+    : "Rp 14.750.000";
+
+  // 4. Calculate Projects Needing Review
+  const pendingProjectsCount = projectsData
+    ? projectsData.filter(p => p.status === 'revision' || p.status === 'in_progress').length
+    : 17;
+
+  // 5. Activity Log formatting
+  const formattedActivityRows = logsData && logsData.length > 0
+    ? logsData.slice(0, 5).map(log => {
+        const time = new Date(log.created_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        const text = log.message_type === 'fee' ? 'Kirim tagihan SPP' : 'Kirim log pesan';
+        const detail = `${log.student_name || 'Siswa'} - ${log.recipient_phone}`;
+        return [time, text, detail, log.sender_name || 'Sistem'];
+      })
+    : mockActivityRows;
+
+  const isLoading = loadingStudents || loadingFees || loadingProjects || loadingLogs;
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="h-24 animate-pulse rounded-3xl bg-white border border-slate-200" />
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {[1, 2, 3, 4].map(n => <div key={n} className="h-28 animate-pulse rounded-2xl bg-white border border-slate-200" />)}
+        </div>
+        <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+          <div className="h-[320px] animate-pulse rounded-2xl bg-white border border-slate-200" />
+          <div className="h-[320px] animate-pulse rounded-2xl bg-white border border-slate-200" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="rounded-3xl border border-blue-100 bg-white p-6 shadow-sm">
@@ -21,17 +87,17 @@ export function DashboardPage() {
         </p>
       </div>
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard title="Siswa Aktif" value="128" subtext="+8 dari bulan lalu" icon={Users} accent="blue" />
-        <StatCard title="Hadir Hari Ini" value="96" subtext="75% dari total siswa" icon={UserCheck} accent="green" />
-        <StatCard title="SPP Belum Lunas" value="28" subtext="Rp 14.750.000" icon={CreditCard} accent="orange" />
-        <StatCard title="Project Perlu Review" value="17" subtext="Perlu perhatian mentor" icon={FileCheck2} accent="purple" />
+        <StatCard title="Siswa Aktif" value={String(activeStudentsCount)} subtext={activeStudentsSubtext} icon={Users} accent="blue" />
+        <StatCard title="Hadir Hari Ini" value={String(attendanceTodayCount)} subtext={`${attendancePercentage}% dari total siswa`} icon={UserCheck} accent="green" />
+        <StatCard title="SPP Belum Lunas" value={String(unpaidCount)} subtext={totalTunggakan} icon={CreditCard} accent="orange" />
+        <StatCard title="Project Perlu Review" value={String(pendingProjectsCount)} subtext="Perlu perhatian mentor" icon={FileCheck2} accent="purple" />
       </div>
       <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
         <AttendanceChart />
         <ReminderList />
       </div>
       <SectionCard title="Aktivitas Hari Ini">
-        <DataTable columns={['Waktu', 'Aktivitas', 'Detail', 'Oleh']} rows={activityRows} />
+        <DataTable columns={['Waktu', 'Aktivitas', 'Detail', 'Oleh']} rows={formattedActivityRows} />
       </SectionCard>
     </div>
   );
@@ -78,10 +144,10 @@ function AttendanceChart() {
 
 function ReminderList() {
   const reminders = [
-    ['SPP Bulan Mei jatuh tempo', '5 siswa belum membayar', '09:30', Wallet, 'orange'],
-    ['Absensi belum diisi', '2 kelas hari ini belum diisi', '08:45', CalendarCheck, 'blue'],
-    ['Project perlu review', '17 project menunggu review', '08:30', FolderKanban, 'purple'],
-    ['Kelas akan dimulai', 'Desain Grafis - 10:00 WIB', '09:50', BookOpen, 'teal'],
+    ['SPP Bulan Ini jatuh tempo', 'Beberapa siswa belum membayar', '09:30', Wallet, 'orange'],
+    ['Absensi belum diisi', 'Cek kelas hari ini yang belum diisi', '08:45', CalendarCheck, 'blue'],
+    ['Project perlu review', 'Beberapa project menunggu review', '08:30', FolderKanban, 'purple'],
+    ['Kelas akan dimulai', 'Cek jadwal hari ini', '09:50', BookOpen, 'teal'],
   ];
 
   return (
@@ -106,3 +172,4 @@ function ReminderList() {
     </SectionCard>
   );
 }
+
