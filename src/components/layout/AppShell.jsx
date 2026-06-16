@@ -10,7 +10,6 @@ import {
   MessageCircle,
   Search,
   Settings,
-  Sparkles,
   Users,
   Wallet,
   Award,
@@ -104,14 +103,7 @@ function Sidebar() {
           );
         })}
       </nav>
-
-      <div className="absolute bottom-5 left-4 right-4 rounded-2xl border border-teal-100 bg-teal-50 p-4">
-        <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-xl bg-white text-teal-700">
-          <Sparkles size={18} />
-        </div>
-        <p className="text-sm font-semibold text-slate-900">Siap Cloudflare D1</p>
-        <p className="mt-1 text-xs leading-5 text-slate-600">UI sudah disiapkan untuk data API dan binding backend nanti.</p>
-      </div>
+      
     </aside>
   );
 }
