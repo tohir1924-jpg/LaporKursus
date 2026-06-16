@@ -9,6 +9,9 @@ import { ProjectsPage } from './pages/ProjectsPage';
 import { ReminderPage } from './pages/ReminderPage';
 import { StudentProfilePage } from './pages/StudentProfilePage';
 import { LoginPage } from './pages/LoginPage';
+import { StudentsPage } from './pages/StudentsPage';
+import { ClassesPage } from './pages/ClassesPage';
+import { ProgramsPage } from './pages/ProgramsPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -54,8 +57,9 @@ function App() {
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/students" element={<PlaceholderPage title="Siswa" />} />
-        <Route path="/classes" element={<PlaceholderPage title="Kelas" />} />
+        <Route path="/students" element={<StudentsPage />} />
+        <Route path="/classes" element={<ClassesPage />} />
+        <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/attendance" element={<AttendancePage />} />
         <Route path="/billing" element={<BillingPage />} />
         <Route path="/reminders" element={<ReminderPage />} />
@@ -68,6 +72,8 @@ function App() {
     </AppShell>
   );
 }
+
+
 
 export default App;
 

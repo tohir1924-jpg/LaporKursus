@@ -13,6 +13,7 @@ import {
   Sparkles,
   Users,
   Wallet,
+  Award,
 } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, match: ['/', '/dashboard'] },
   { to: '/students', label: 'Siswa', icon: Users },
   { to: '/classes', label: 'Kelas', icon: BookOpen },
+  { to: '/programs', label: 'Program Kursus', icon: Award },
   { to: '/attendance', label: 'Absensi', icon: CalendarCheck },
   { to: '/billing', label: 'SPP Bulanan', icon: Wallet },
   { to: '/reminders', label: 'Pesan Pengingat', icon: MessageCircle },
@@ -33,6 +35,7 @@ const pageTitles = {
   '/dashboard': 'Dashboard',
   '/students': 'Siswa',
   '/classes': 'Kelas',
+  '/programs': 'Program Kursus',
   '/attendance': 'Absensi',
   '/billing': 'SPP Bulanan',
   '/reminders': 'Pesan Pengingat',

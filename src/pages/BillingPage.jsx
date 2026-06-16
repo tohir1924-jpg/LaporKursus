@@ -11,6 +11,7 @@ export function BillingPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showGenerateModal, setShowGenerateModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showEditFeeModal, setShowEditFeeModal] = useState(false);
   const [activeFee, setActiveFee] = useState(null);
   
   // Payment form states
@@ -18,6 +19,10 @@ export function BillingPage() {
   const [paymentDate, setPaymentDate] = useState(new Date().toISOString().split('T')[0]);
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [paymentNote, setPaymentNote] = useState('');
+
+  // Fee Edit form states
+  const [editAmount, setEditAmount] = useState('');
+  const [editNote, setEditNote] = useState('');
 
   // Class state for generation
   const [genClassId, setGenClassId] = useState('');
@@ -47,6 +52,9 @@ export function BillingPage() {
 
   // 5. Mutation for payment
   const paymentMutation = useMutation(({ feeId, payload }) => api.post(`/fees/${feeId}/payments`, payload));
+
+  // 5.1. Mutation for editing billing
+  const editFeeMutation = useMutation(({ feeId, payload }) => api.put(`/fees/${feeId}`, payload));
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -92,6 +100,31 @@ export function BillingPage() {
       refetchSummary();
     } catch (err) {
       alert(err.message || 'Gagal memproses pembayaran');
+    }
+  };
+
+  const handleOpenEditFee = (fee) => {
+    setActiveFee(fee);
+    setEditAmount(fee.amount);
+    setEditNote(fee.note || '');
+    setShowEditFeeModal(true);
+  };
+
+  const handleEditFeeSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await editFeeMutation.mutate({
+        feeId: activeFee.id,
+        payload: {
+          amount: Number(editAmount),
+          note: editNote
+        }
+      });
+      setShowEditFeeModal(false);
+      refetchFees();
+      refetchSummary();
+    } catch (err) {
+      alert(err.message || 'Gagal mengubah nominal tagihan');
     }
   };
 
@@ -143,16 +176,25 @@ export function BillingPage() {
       `Rp ${f.amount.toLocaleString('id-ID')}`,
       `Rp ${totalPaid.toLocaleString('id-ID')}`,
       <StatusBadge value={statusText} />,
-      f.status !== 'paid' ? (
+      <div className="flex gap-2">
         <button 
-          onClick={() => handleOpenPayment(f)}
-          className="font-bold text-red-600 hover:text-red-700 transition"
+          onClick={() => handleOpenEditFee(f)}
+          className="font-bold text-slate-500 hover:text-slate-800 transition"
+          title="Ubah Nominal Tagihan"
         >
-          Bayar
+          Ubah
         </button>
-      ) : (
-        <span className="font-semibold text-slate-400">Lunas</span>
-      )
+        {f.status !== 'paid' ? (
+          <button 
+            onClick={() => handleOpenPayment(f)}
+            className="font-bold text-red-600 hover:text-red-700 transition"
+          >
+            Bayar
+          </button>
+        ) : (
+          <span className="font-semibold text-slate-400">Lunas</span>
+        )}
+      </div>
     ];
   });
 
@@ -407,6 +449,69 @@ export function BillingPage() {
                   className="h-11 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-700 transition"
                 >
                   {paymentMutation.loading ? 'Menyimpan...' : 'Simpan Pembayaran'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Fee Nominal Modal */}
+      {showEditFeeModal && activeFee && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-slate-100">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-lg font-bold text-slate-900">Ubah Nominal Tagihan SPP</h3>
+              <button onClick={() => setShowEditFeeModal(false)} className="text-slate-400 hover:text-slate-600">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="mt-3">
+              <p className="text-xs text-slate-500">Nama Siswa</p>
+              <p className="text-base font-bold text-slate-900">{activeFee.student_name}</p>
+              <p className="mt-0.5 text-xs text-slate-500">Bulan Tagihan: {activeFee.month}/{activeFee.year}</p>
+            </div>
+            <form onSubmit={handleEditFeeSubmit} className="mt-4 space-y-4">
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">Nominal Baru (Rp)</label>
+                <input
+                  type="number"
+                  value={editAmount}
+                  onChange={(e) => setEditAmount(e.target.value)}
+                  className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100"
+                  required
+                  min={activeFee.total_paid || 0}
+                />
+                <p className="mt-1 text-xs text-slate-400">
+                  Sudah dibayarkan oleh siswa: Rp {(activeFee.total_paid || 0).toLocaleString('id-ID')}
+                </p>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">Catatan Perubahan</label>
+                <input
+                  type="text"
+                  placeholder="Alasan perubahan (misal: Diskon khusus, Beasiswa)"
+                  value={editNote}
+                  onChange={(e) => setEditNote(e.target.value)}
+                  className="mt-1.5 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm outline-none"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button 
+                  type="button" 
+                  onClick={() => setShowEditFeeModal(false)}
+                  className="h-11 rounded-xl px-4 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+                >
+                  Batal
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={editFeeMutation.loading}
+                  className="h-11 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white hover:bg-blue-700 transition"
+                >
+                  {editFeeMutation.loading ? 'Menyimpan...' : 'Simpan Perubahan'}
                 </button>
               </div>
             </form>

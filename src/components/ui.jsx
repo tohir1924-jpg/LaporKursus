@@ -105,10 +105,13 @@ export function SelectBox({ children }) {
   );
 }
 
-export function PrimaryButton({ children, icon: Icon, color = 'blue' }) {
+export function PrimaryButton({ children, icon: Icon, color = 'blue', ...props }) {
   const styles = color === 'green' ? 'bg-green-500 hover:bg-green-600 focus:ring-green-100' : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-100';
   return (
-    <button className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold text-white shadow-sm transition focus:outline-none focus:ring-4 ${styles}`}>
+    <button 
+      className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold text-white shadow-sm transition focus:outline-none focus:ring-4 ${styles}`}
+      {...props}
+    >
       {Icon && <Icon size={17} />}
       {children}
     </button>
