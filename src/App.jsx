@@ -12,6 +12,8 @@ import { LoginPage } from './pages/LoginPage';
 import { StudentsPage } from './pages/StudentsPage';
 import { ClassesPage } from './pages/ClassesPage';
 import { ProgramsPage } from './pages/ProgramsPage';
+import { ReportsPage } from './pages/ReportsPage';
+import { SettingsPage } from './pages/SettingsPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -65,8 +67,8 @@ function App() {
         <Route path="/reminders" element={<ReminderPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/profile" element={<StudentProfilePage />} />
-        <Route path="/reports" element={<PlaceholderPage title="Laporan" />} />
-        <Route path="/settings" element={<PlaceholderPage title="Pengaturan" />} />
+        <Route path="/reports" element={<ReportsPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AppShell>
